@@ -7,11 +7,16 @@ interface Props {
 }
 
 const PriceFormatter = memo(({ amount, className }: Props) => {
-  const formattedPrice = new Number(amount).toLocaleString("en-US", {
-    currency: "USD",
+  const currency = process.env.NEXT_PUBLIC_CURRENCY || "USD";
+  const currencySymbol = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || "$";
+  const locale = process.env.NEXT_PUBLIC_CURRENCY_LOCALE || "en-US";
+
+  const formattedPrice = new Number(amount).toLocaleString(locale, {
+    currency: currency,
     style: "currency",
     minimumFractionDigits: 2,
   });
+
   return (
     <span
       className={twMerge("text-sm font-semibold text-dark-color", className)}

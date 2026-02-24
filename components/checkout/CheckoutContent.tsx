@@ -81,10 +81,20 @@ export function CheckoutContent() {
   } | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+  // Check if COD is enabled from environment
+  const isCODEnabled = process.env.NEXT_PUBLIC_COD_ENABLED === "true";
+
   // New pricing structure
   const grossSubtotal = getSubTotalPrice(); // Gross amount (before discount)
   const totalDiscount = getTotalDiscount(); // Total discount amount
   const currentSubtotal = grossSubtotal - totalDiscount; // After discount
+
+  // Set default payment method based on COD availability
+  useEffect(() => {
+    if (!isCODEnabled && selectedPaymentMethod === PAYMENT_METHODS.CASH_ON_DELIVERY) {
+      setSelectedPaymentMethod(PAYMENT_METHODS.STRIPE);
+    }
+  }, [isCODEnabled, selectedPaymentMethod]);
 
   // Business account discount (2% additional discount)
   const businessDiscount = userProfile?.isBusiness ? currentSubtotal * 0.02 : 0;
@@ -347,24 +357,26 @@ export function CheckoutContent() {
               }
               className="space-y-3"
             >
-              <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                <RadioGroupItem
-                  value={PAYMENT_METHODS.CASH_ON_DELIVERY}
-                  id="cod"
-                  className="mt-1"
-                />
-                <div className="flex-1">
-                  <Label htmlFor="cod" className="cursor-pointer">
-                    <div className="flex items-center gap-2 font-medium">
-                      <Truck className="w-4 h-4" />
-                      Cash on Delivery
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Pay when your order is delivered to your doorstep
-                    </p>
-                  </Label>
+              {isCODEnabled && (
+                <div className="flex items-start space-x-3 p-3 border rounded-lg">
+                  <RadioGroupItem
+                    value={PAYMENT_METHODS.CASH_ON_DELIVERY}
+                    id="cod"
+                    className="mt-1"
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="cod" className="cursor-pointer">
+                      <div className="flex items-center gap-2 font-medium">
+                        <Truck className="w-4 h-4" />
+                        Cash on Delivery
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Pay when your order is delivered to your doorstep
+                      </p>
+                    </Label>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="flex items-start space-x-3 p-3 border rounded-lg">
                 <RadioGroupItem

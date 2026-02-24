@@ -1,6 +1,16 @@
 "use client";
 
-const ProductsDetails = () => {
+import { Product } from "@/sanity.types";
+
+interface ProductsDetailsProps {
+  product: Product;
+}
+
+const ProductsDetails = ({ product }: ProductsDetailsProps) => {
+  const detailedDescription = product?.detailedDescription || product?.description;
+  const weight = product?.weight || "N/A";
+  const dimensions = product?.dimensions || "N/A";
+
   return (
     <div className="w-full space-y-8 mb-10">
       {/* Description Section */}
@@ -10,22 +20,11 @@ const ProductsDetails = () => {
           Description
         </h2>
         <div className="prose prose-sm max-w-none text-gray-600">
-          <p className="mb-4">
-            In ducimus quod sed eum repellendus ea fugiat. Pariatur et illo at
-            iure harum. Molestiae a itaque voluptas explicabo praesentium.
-            Possimus omnis aut architecto et. Repellendus ab ipsa in non
-            doloremque tenetur est doloremque.
-          </p>
-          <p className="mb-4">
-            Quam in facere soluta consequatur voluptatem beatae asperiores. Qui
-            quia itaque illo eos quibusdam voluptatem et. Est aut deserunt iste.
-            Et ipsum eius ut odit deleniti.
-          </p>
-          <p>
-            Officia praesentium ipsam perferendis possimus ex culpa voluptatem
-            dolore. Aut id sit et vitae. Quis unde doloremque quisquam facere.
-            In qui eos est voluptatem repudiandae blanditiis consequatur.
-          </p>
+          {detailedDescription ? (
+            <p className="whitespace-pre-wrap">{detailedDescription}</p>
+          ) : (
+            <p>No detailed description available for this product.</p>
+          )}
         </div>
       </div>
 
@@ -43,7 +42,7 @@ const ProductsDetails = () => {
                   Weight
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  190 kg
+                  {weight}
                 </td>
               </tr>
               <tr className="hover:bg-gray-50 transition-colors">
@@ -51,7 +50,7 @@ const ProductsDetails = () => {
                   Dimensions
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  3 × 72 × 109 cm
+                  {dimensions}
                 </td>
               </tr>
             </tbody>

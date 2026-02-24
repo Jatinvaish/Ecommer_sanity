@@ -152,6 +152,69 @@ export const productType = defineType({
         }),
       ],
     }),
+    defineField({
+      name: "detailedDescription",
+      title: "Detailed Description",
+      type: "text",
+      description: "Full product description for the details section",
+      rows: 5,
+    }),
+    defineField({
+      name: "weight",
+      title: "Weight",
+      type: "string",
+      description: "Product weight (e.g., 190 kg, 2.5 lbs)",
+    }),
+    defineField({
+      name: "dimensions",
+      title: "Dimensions",
+      type: "string",
+      description: "Product dimensions (e.g., 3 × 72 × 109 cm)",
+    }),
+    defineField({
+      name: "shippingInfo",
+      title: "Shipping Information",
+      type: "object",
+      fields: [
+        defineField({
+          name: "freeShipping",
+          title: "Free Shipping",
+          type: "boolean",
+          initialValue: true,
+        }),
+        defineField({
+          name: "estimatedDays",
+          title: "Estimated Delivery Days",
+          type: "string",
+          initialValue: "3-5 business days",
+        }),
+        defineField({
+          name: "expressDays",
+          title: "Express Delivery Days",
+          type: "string",
+          initialValue: "1-2 business days",
+        }),
+      ],
+    }),
+    defineField({
+      name: "warrantyInfo",
+      title: "Warranty Information",
+      type: "object",
+      fields: [
+        defineField({
+          name: "warrantyPeriod",
+          title: "Warranty Period",
+          type: "string",
+          initialValue: "1 Year",
+        }),
+        defineField({
+          name: "returnPeriod",
+          title: "Return Period",
+          type: "string",
+          initialValue: "30 Days",
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {

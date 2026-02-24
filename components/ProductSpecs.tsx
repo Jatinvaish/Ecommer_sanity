@@ -10,6 +10,9 @@ interface ProductSpecsProps {
 }
 
 const ProductSpecs = ({ product }: ProductSpecsProps) => {
+  const shippingInfo = product?.shippingInfo;
+  const warrantyInfo = product?.warrantyInfo;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
       {/* Product Features */}
@@ -62,11 +65,17 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
           </div>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
-          <div className="flex items-center gap-2">
-            <span className="text-green-600 font-medium">✓ Free Shipping</span>
+          {shippingInfo?.freeShipping !== false && (
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 font-medium">✓ Free Shipping</span>
+            </div>
+          )}
+          <div className="text-gray-600">
+            Estimated: {shippingInfo?.estimatedDays || "3-5 business days"}
           </div>
-          <div className="text-gray-600">Estimated: 2-5 business days</div>
-          <div className="text-gray-600">Express: 1-2 business days</div>
+          <div className="text-gray-600">
+            Express: {shippingInfo?.expressDays || "1-2 business days"}
+          </div>
         </CardContent>
       </Card>
 
@@ -80,11 +89,15 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <div className="text-gray-600">
-            <span className="font-medium text-shop_dark_green">1 Year</span>{" "}
+            <span className="font-medium text-shop_dark_green">
+              {warrantyInfo?.warrantyPeriod || "1 Year"}
+            </span>{" "}
             Manufacturer Warranty
           </div>
           <div className="text-gray-600">
-            <span className="font-medium text-shop_dark_green">30 Days</span>{" "}
+            <span className="font-medium text-shop_dark_green">
+              {warrantyInfo?.returnPeriod || "30 Days"}
+            </span>{" "}
             Return Policy
           </div>
           <div className="text-gray-600">Free Tech Support</div>

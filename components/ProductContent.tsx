@@ -35,6 +35,8 @@ import {
 } from "@/components/ProductClientWrapper";
 import RelatedProducts from "./RelatedProducts";
 import { BRAND_QUERYResult } from "@/sanity.types";
+import { toast } from "sonner";
+import { urlFor } from "@/sanity/lib/image";
 
 interface ProductContentProps {
   product: Product;
@@ -60,6 +62,59 @@ const ProductContent = ({
       });
     }
   }, [product]);
+
+  // Handle product sharing
+  const handleShare = async () => {
+    const productUrl = typeof window !== "undefined" ? window.location.href : "";
+    
+    const shareData = {
+      title: product?.name || "Check out this product",
+      text: `${product?.name}\n${product?.description || ""}\n\nPrice: ${process.env.NEXT_PUBLIC_CURRENCY_SYMBOL}${product?.price}`,
+      url: productUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(productUrl);
+        toast.success("Link copied to clipboard!");
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name !== "AbortError") {
+        try {
+          await navigator.clipboard.writeText(productUrl);
+          toast.success("Link copied to clipboard!");
+        } catch (clipboardError) {
+          toast.error("Unable to share");
+        }
+      }
+    }
+  };
+
+  // Handle compare colors
+  const handleCompareColors = () => {
+    const availableColors = product?.images?.length || 1;
+    toast.info(`This product has ${availableColors} color variant${availableColors > 1 ? 's' : ''} available`, {
+      description: "View all images to see different color options"
+    });
+  };
+
+  // Handle ask question
+  const handleAskQuestion = () => {
+    const supportEmail = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@ecommerce.com";
+    const subject = encodeURIComponent(`Question about ${product?.name}`);
+    const body = encodeURIComponent(`Hi,\n\nI have a question about the product: ${product?.name}\n\nProduct Link: ${typeof window !== "undefined" ? window.location.href : ""}\n\nMy Question:\n`);
+    window.location.href = `mailto:${supportEmail}?subject=${subject}&body=${body}`;
+  };
+
+  // Handle delivery info
+  const handleDeliveryInfo = () => {
+    toast.info("Delivery Information", {
+      description: "Free delivery on orders above ₹500. Standard delivery: 3-5 days. Express: 1-2 days.",
+      duration: 5000
+    });
+  };
 
   return (
     <ProductAnimationWrapper>
@@ -187,19 +242,31 @@ const ProductContent = ({
 
             {/* Action Links */}
             <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-b-gray-200 py-5 -mt-2">
-              <button className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors">
+              <button 
+                onClick={handleCompareColors}
+                className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors"
+              >
                 <RxBorderSplit className="text-lg" />
                 <span>Compare color</span>
               </button>
-              <button className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors">
+              <button 
+                onClick={handleAskQuestion}
+                className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors"
+              >
                 <FaRegQuestionCircle className="text-lg" />
                 <span>Ask a question</span>
               </button>
-              <button className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors">
+              <button 
+                onClick={handleDeliveryInfo}
+                className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors"
+              >
                 <TbTruckDelivery className="text-lg" />
                 <span>Delivery & Return</span>
               </button>
-              <button className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors">
+              <button 
+                onClick={handleShare}
+                className="flex items-center gap-2 text-sm text-black hover:text-shop_light_green hoverEffect transition-colors"
+              >
                 <FiShare2 className="text-lg" />
                 <span>Share</span>
               </button>
@@ -243,7 +310,7 @@ const ProductContent = ({
 
         {/* Product Details Section */}
         <ProductSectionWrapper delay={0.6}>
-          <ProductsDetails />
+          <ProductsDetails product={product} />
         </ProductSectionWrapper>
 
         {/* Trust Indicators & Guarantees */}
@@ -265,7 +332,7 @@ const ProductContent = ({
                 Fast Delivery
               </h3>
               <p className="text-sm text-gray-600">
-                Free shipping on orders over $50
+                Free shipping on orders over {process.env.NEXT_PUBLIC_CURRENCY_SYMBOL}50
               </p>
             </Card>
 

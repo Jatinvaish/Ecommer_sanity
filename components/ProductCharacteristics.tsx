@@ -31,21 +31,25 @@ const ProductCharacteristics = ({
             )}
           </p>
           <p className="flex items-center justify-between">
-            Collection:{" "}
-            <span className="font-semibold tracking-wide">2025</span>
-          </p>
-          <p className="flex items-center justify-between">
             Type:{" "}
             <span className="font-semibold tracking-wide">
-              {product?.variant}
+              {product?.variant || "General"}
             </span>
           </p>
           <p className="flex items-center justify-between">
             Stock:{" "}
             <span className="font-semibold tracking-wide">
-              {product?.stock ? "Available" : "Out of Stock"}
+              {product?.stock ? `${product.stock} Available` : "Out of Stock"}
             </span>
           </p>
+          {product?.status && (
+            <p className="flex items-center justify-between">
+              Status:{" "}
+              <span className="font-semibold tracking-wide uppercase">
+                {product.status}
+              </span>
+            </p>
+          )}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

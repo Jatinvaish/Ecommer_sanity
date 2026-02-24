@@ -9,17 +9,17 @@ const BASE_URL = "http://jatindevv.netlify.app/";
  */
 export function generateProductMetadata(product: any): Metadata {
   const title = product.name || "Product";
+  const currencySymbol = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || "₹";
   const description =
     product.description ||
     `Buy ${title} online at Ecommerce. ${
-      product.price ? `Price: $${product.price}` : ""
+      product.price ? `Price: ${currencySymbol}${product.price}` : ""
     }`;
   const imageUrl = product.images?.[0]
-    ? urlFor(product.images[0]).url()
+    ? urlFor(product.images[0]).width(1200).height(630).url()
     : "/og-image.jpg";
   const url = `${BASE_URL}/product/${product.slug?.current}`;
 
-  // Extract brand name if it's populated
   const brandName =
     typeof product.brand === "object" ? product.brand?.name : "";
 

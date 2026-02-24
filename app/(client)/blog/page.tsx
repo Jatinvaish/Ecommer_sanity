@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { GET_ALL_BLOGResult } from "@/sanity.types";
+import { GET_ALL_BLOG_RESULT } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
 import { getAllBlogs } from "@/sanity/queries";
 import dayjs from "dayjs";
@@ -24,7 +24,7 @@ const BlogPage = async () => {
 
   // Extract description from blog body
   const extractDescription = (
-    body: GET_ALL_BLOGResult[0]["body"],
+    body: GET_ALL_BLOG_RESULT[0]["body"],
     maxLength: number = 150
   ) => {
     if (!body || !Array.isArray(body))

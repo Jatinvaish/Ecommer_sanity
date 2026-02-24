@@ -3,7 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import Title from "@/components/Title";
 import DealCountdown from "@/components/DealCountdown";
 import DynamicBreadcrumb from "@/components/DynamicBreadcrumb";
-import { DEAL_PRODUCTSResult, Product } from "@/sanity.types";
+import { DEAL_PRODUCTS_RESULT, Product } from "@/sanity.types";
 import { getDealProducts, getCategories } from "@/sanity/queries";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -184,7 +184,7 @@ const DealPage = async () => {
 
         {products && products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-            {products.map((product: DEAL_PRODUCTSResult[0]) => (
+            {products.map((product: DEAL_PRODUCTS_RESULT[0]) => (
               <div
                 key={product?._id}
                 className="transform hover:scale-105 transition-transform duration-300"
